@@ -1,5 +1,13 @@
 ////////////////////////////////////////////////////////
 // Read GENESIS.md for an overview of this source code
+
+ if (window.NodeList && !NodeList.prototype.forEach) { // NodeList.forEach override polyfill
+   NodeList.prototype.forEach = function (callback, argument) {
+     argument = argument || window;
+     for (var i = 0; i < this.length; i++) { callback.call(argument, this[i], i, this) }
+   }
+ }
+ 
 (function(context) {
   var root = this;
   ////////////////////////////////////////////////////
@@ -366,12 +374,6 @@
         Nucleus.build($node);
         Phenotype.build($node, $node.Genotype);
         return $node;
-      }
-      if (window.NodeList && !NodeList.prototype.forEach) { // NodeList.forEach override polyfill
-        NodeList.prototype.forEach = function (callback, argument) {
-          argument = argument || window;
-          for (var i = 0; i < this.length; i++) { callback.call(argument, this[i], i, this) }
-        }
       }
       return God.detect($context).map(function(gene) {  // find all the Cell objects and build
         return $context.document.body.$build(gene, []);
